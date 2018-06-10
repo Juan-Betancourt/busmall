@@ -2,3 +2,10 @@ img {
     height: 200px;
     width: 200px;
 }
+
+#image-container {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
