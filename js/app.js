@@ -1,51 +1,46 @@
 'use strict';
-
-//we need an array of images-DONE
-//we need a constructor function for products-DONE
-//we need an event listener
-//we need an image repository 
-//we need to randomize the images-DONE
-//we need a vote counter
-//we need a view counter
-//we need an event handler
-//we need to know total clicks
-//we need to display the list w/ DOM manipulation
-//we need to make sure the images do not repeat-DONE
-//all the DOM appending
-Product.names = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass'];
-Product.all = [];
+Product.names = ['Bag', 'Banana', 'Bathroom', 'Boots', 'Breakfast', 'Bubblegum', 'Chair', 'Cthulhu', 'Dog-duck', 'Dragon', 'Pen', 'Pet-sweep', 'Scissors', 'Shark', 'Sweep', 'Tauntaun', 'Unicorn', 'Usb', 'Water-can', 'Wine-glass'];
 Product.container = document.getElementById('image-container');
-Product.justViewed = [];
 Product.pics = [document.getElementById('left'), document.getElementById('center'), document.getElementById('right')];
 Product.tally = document.getElementById('total-clicks');
+Product.all = [];
+Product.justViewed = [];
 Product.totalClicks = 0;
 
 //========== Create Constructor ============//
 function Product(name) {
     this.name = name;
-    if (name === 'sweep') {
+    if (name === 'Sweep') {
         this.path = 'img/' + name + '.png';
-    } else if (name === 'usb') {
+    } else if (name === 'Usb') {
         this.path = 'img/' + name + '.gif';
     } else {
         this.path = 'img/' + name + '.jpg';
     }
+    this.path;
     this.votes = 0;
     this.view = 0;
     Product.all.push(this);
-}
-for (var i = 0; i < Product.names.length; i++) {
-    new Product(Product.names[i]);
-}
+};
+
+function cycleNames() {
+    for (var i = 0; i < Product.names.length; i++) {
+        new Product(Product.names[i]);
+    };
+};
 
 //========== Make Random Generator for Products========//
 function makeRandom() {
     return Math.floor(Math.random() * Product.names.length);
-}
+};
 
 //========= Create Three Pics that Display Randomly=====//
 function showPics() {
     var currentPic = [];
+    Product.votesData = [];
+    for (var j = 0; j < Product.name.length; j++)
+        Product.votesData.push(Product.all[j].votes)
+
     currentPic[0] = makeRandom(); // make the left side image random
     while (Product.justViewed.indexOf(currentPic[0]) !== -1) {
         console.error('Duplicate, rerun!');
@@ -61,7 +56,7 @@ function showPics() {
 
     currentPic[2] = makeRandom(); // make the right image random
     while (currentPic[0] === currentPic[2] || currentPic[1] === currentPic[2] || Product.justViewed.indexOf(currentPic[2]) !== -1) {
-        console.error('Duplicate at rignt');
+        console.error('Duplicate at right');
         currentPic[2] = makeRandom();
     };
 
@@ -78,7 +73,7 @@ function showPics() {
 function clicksPerPic(event) {
     if (Product.totalClicks > 24) {
         Product.container.removeEventListener('click', clicksPerPic);
-        showTotals();
+        makeChart();
     };
     //This is how I direct a user to specific image
     if (event.target.id === 'image-container') {
@@ -95,15 +90,42 @@ function clicksPerPic(event) {
     showPics();
 };
 
-//======== Show Total Clicks chart ===========//
-function showTotals() {
-    for (var i = 0; i < Product.all.length; i++) {
-        var liEl = document.createElement('li');
-        liEl.textContent = Product.all[i].name + ' has ' + Product.all[i].votes + ' votes in ' + Product.all[i].view + ' view.';
-        Product.tally.appendChild(liEl);
-    };
-};
+// //======== Show Total Clicks chart ===========//
+// function showTotals() {
+//     for (var i = 0; i < Product.all.length; i++) {
+//         var liEl = document.createElement('li');
+//         liEl.textContent = Product.all[i].name + ' has ' + Product.all[i].votes + ' votes in ' + Product.all[i].view + ' view.';
+//         Product.tally.appendChild(liEl);
+//     };
+// };
+
+//============ Visual Chart =================//
+function makeChart() {
+    var labelColors = ['red', 'blue', 'yellow', 'green', 'purple', 'orange', 'red', 'blue', 'yellow', 'green', 'purple', 'orange', 'red', 'blue', 'yellow', 'green', 'purple', 'orange', 'red', 'blue'];
+    var ctx = document.getElementById('graph').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Product.names,
+            datasets: [{
+                label: '# of votes for each product',
+                data: Product.votesData,
+                backgroundColor: labelColors
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    })
+}
 
 //========= Event Listener ========// 
 Product.container.addEventListener('click', clicksPerPic);
+cycleNames();
 showPics();
