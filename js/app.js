@@ -71,7 +71,7 @@ function showPics() {
 
 //============ Adding an Event Listener to Keep track of clicks per image ==============//
 function clicksPerPic(event) {
-    if (Product.totalClicks > 24) {
+    if (Product.totalClicks > 23) {
         Product.container.removeEventListener('click', clicksPerPic);
         makeChart();
     };
@@ -101,15 +101,21 @@ function clicksPerPic(event) {
 
 //============ Visual Chart =================//
 function makeChart() {
+    var totalVotes = [];
+    var productNames = [];
     var labelColors = ['red', 'blue', 'yellow', 'green', 'purple', 'orange', 'red', 'blue', 'yellow', 'green', 'purple', 'orange', 'red', 'blue', 'yellow', 'green', 'purple', 'orange', 'red', 'blue'];
     var ctx = document.getElementById('graph').getContext('2d');
+    for (var i = 0; i < Product.all.length; i++) {
+        totalVotes[i] = Product.all[i].votes;
+        productNames[i] = Product.all[i].name;
+    }
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: Product.names,
             datasets: [{
                 label: '# of votes for each product',
-                data: Product.votesData,
+                data: totalVotes,
                 backgroundColor: labelColors
             }]
         },
