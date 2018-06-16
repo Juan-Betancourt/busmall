@@ -74,7 +74,14 @@ function clicksPerPic(event) {
     if (Product.totalClicks > 23) {
         Product.container.removeEventListener('click', clicksPerPic);
         makeChart();
+        localStorage.clear();
     };
+    var productStringify = JSON.stringify(Product.all);
+    localStorage.setItem('products', productStringify);
+
+
+    Product.all = JSON.parse(productStringify);
+
     //This is how I direct a user to specific image
     if (event.target.id === 'image-container') {
         return alert('Need to click on image');
@@ -86,9 +93,15 @@ function clicksPerPic(event) {
             Product.all[i].votes += 1;
             console.log(event.target.id + ' has ' + Product.all[i].votes + ' votes in ' + Product.all[i].view + ' views.');
         };
+        var productTotalClicks = JSON.stringify(Product.totalClicks);
+        localStorage.setItem('click', productTotalClicks);
     };
     showPics();
 };
+if (localStorage.products) {
+    var getClick = localStorage.getItem('click');
+    Product.totalClicks = JSON.parse(getClick);
+}
 
 // //======== Show Total Clicks chart ===========//
 // function showTotals() {
