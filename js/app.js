@@ -102,7 +102,6 @@ if (localStorage.products) {
     var getClick = localStorage.getItem('click');
     Product.totalClicks = JSON.parse(getClick);
 }
-
 // //======== Show Total Clicks chart ===========//
 // function showTotals() {
 //     for (var i = 0; i < Product.all.length; i++) {
