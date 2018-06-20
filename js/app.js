@@ -143,6 +143,13 @@ function makeChart() {
     })
 }
 
+var clearLS = document.getElementById('clean-Storage');
+
+clearLS.addEventListener('click', function() {
+    console.log('click it!');
+    localStorage.clear();
+});
+
 //========= Event Listener ========// 
 Product.container.addEventListener('click', clicksPerPic);
 cycleNames();
